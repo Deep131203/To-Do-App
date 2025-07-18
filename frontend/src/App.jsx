@@ -3,6 +3,11 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import './App.css';
 
+// Use deployed backend in production, local in development
+const BASE_URL = import.meta.env.PROD
+  ? 'https://todo-backend-orti.onrender.com'
+  : '';
+
 function Navbar({ user, onLogout }) {
   return (
     <nav className="w-full">
@@ -187,7 +192,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      const res = await axios.get('/api/todos', {
+      const res = await axios.get(`${BASE_URL}/api/todos`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setTodos(res.data);
@@ -204,7 +209,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('/api/todos', { text: input, date, time }, {
+      await axios.post(`${BASE_URL}/api/todos`, { text: input, date, time }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setInput('');
@@ -223,7 +228,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      await axios.patch(`/api/todos/${id}`, { completed }, {
+      await axios.patch(`${BASE_URL}/api/todos/${id}`, { completed }, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setSuccess('Todo updated!');
@@ -239,7 +244,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      await axios.delete(`/api/todos/${id}`, {
+      await axios.delete(`${BASE_URL}/api/todos/${id}`, {
         headers: { Authorization: `Bearer ${user.token}` }
       });
       setSuccess('Todo deleted!');
@@ -255,7 +260,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      const res = await axios.post('/api/auth/login', { username, password });
+      const res = await axios.post(`${BASE_URL}/api/auth/login`, { username, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('username', res.data.username);
       setUser({ token: res.data.token, username: res.data.username });
@@ -271,7 +276,7 @@ function App() {
     setError('');
     setSuccess('');
     try {
-      await axios.post('/api/auth/register', { username, password });
+      await axios.post(`${BASE_URL}/api/auth/register`, { username, password });
       setSuccess('Registration successful! Logging in...');
       await handleLogin(username, password);
     } catch (err) {
