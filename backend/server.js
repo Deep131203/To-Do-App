@@ -28,14 +28,6 @@ mongoose.connect(mongoURI, {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/todos', require('./routes/todos'));
 
-// Serve static files from frontend build in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
-  });
-}
-
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
