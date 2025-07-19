@@ -19,7 +19,7 @@ function Navbar({ user, onLogout }) {
       >
         <div className="font-extrabold text-2xl tracking-tight text-gray-900 flex items-center gap-3">
           <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><polygon points="16,4 28,28 4,28" fill="#111"/></svg>
-          Swapnadeep's todo
+          SM's To-Do
         </div>
         <div>
           {user ? (
