@@ -187,6 +187,30 @@ function App() {
     if (user) inputRef.current?.focus();
   }, [user, todos]);
 
+  // Reminder checker (runs every minute)
+  useEffect(() => {
+    if (!user) return;
+    const interval = setInterval(() => {
+      const now = new Date();
+      const currentDate = now.toISOString().slice(0, 10); // YYYY-MM-DD
+      const currentTime = now.toTimeString().slice(0, 5); // HH:MM
+
+      todos.forEach(todo => {
+        if (
+          todo.date === currentDate &&
+          todo.time === currentTime &&
+          !todo.completed &&
+          !todo._reminderShown // Prevent duplicate alerts
+        ) {
+          alert(`⏰ Reminder: "${todo.text}" is scheduled for now!`);
+          todo._reminderShown = true;
+        }
+      });
+    }, 60 * 1000); // every minute
+
+    return () => clearInterval(interval);
+  }, [todos, user]);
+
   const fetchTodos = async () => {
     setLoading(true);
     setError('');
