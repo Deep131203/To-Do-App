@@ -48,8 +48,14 @@ router.patch('/:id', auth, async (req, res) => {
     if (!todo) return res.status(404).json({ message: 'Todo not found' });
     if (req.body.text) todo.text = req.body.text;
     if (req.body.completed !== undefined) todo.completed = req.body.completed;
-    if (req.body.date) todo.date = req.body.date;
-    if (req.body.time) todo.time = req.body.time;
+    if (req.body.date) {
+      todo.date = req.body.date;
+      todo.reminded = false; // Reset reminder if date/time changes
+    }
+    if (req.body.time) {
+      todo.time = req.body.time;
+      todo.reminded = false; // Reset reminder if date/time changes
+    }
     const updatedTodo = await todo.save();
     res.json(updatedTodo);
   } catch (err) {

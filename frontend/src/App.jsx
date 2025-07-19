@@ -414,6 +414,9 @@ function App() {
                           {todo.text}
                           <span className="todo-meta text-gray-500 text-base mt-1">
                             {todo.date} {todo.time}
+                            {todo.reminded && (
+                              <span className="ml-2 text-green-500 font-semibold">⏰ Reminder sent</span>
+                            )}
                           </span>
                         </span>
                         <button

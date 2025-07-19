@@ -28,6 +28,31 @@ mongoose.connect(mongoURI, {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/todos', require('./routes/todos'));
 
+const Todo = require('./models/Todo');
+
+// Reminder scheduler (runs every minute)
+setInterval(async () => {
+  const now = new Date();
+  const currentDate = now.toISOString().slice(0, 10); // YYYY-MM-DD
+  const currentTime = now.toTimeString().slice(0, 5); // HH:MM
+
+  // Find todos that match current date & time and haven't been reminded
+  const todos = await Todo.find({
+    date: currentDate,
+    time: currentTime,
+    reminded: false
+  }).populate('user');
+
+  for (const todo of todos) {
+    // TODO: Replace with email or push notification logic
+    console.log(`Reminder for user ${todo.user.username}: ${todo.text} at ${todo.date} ${todo.time}`);
+
+    // Mark as reminded
+    todo.reminded = true;
+    await todo.save();
+  }
+}, 60 * 1000); // every minute
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

@@ -23,6 +23,10 @@ const TodoSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now
+  },
+  reminded: {
+    type: Boolean,
+    default: false
   }
 });
 
